@@ -1,0 +1,58 @@
+#Python
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+#Virtual Environments
+.env 
+.venv
+env/
+venv/
+ENV/
+
+#Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+#Data - large files (track with DVC or Git LFS in real projects)
+data/raw/*.csv
+data/raw/*.parquet
+data/processed/*.pkl
+data/processed/*joblib
+
+#Models - large binaries (use MLflow/DVC in prod)
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.pt
+ 
+# Logs
+logs/*.log
+logs/*.txt
+ 
+# OS
+.DS_Store
+Thumbs.db
+ 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+ 
+# Reports - keep structure, ignore generated
+reports/figures/*.png
+reports/metrics/*.json
+ 
+# Secrets
+.env
+secrets.yaml
+*.pem
