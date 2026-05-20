@@ -1,0 +1,101 @@
+# =============================================================
+# configs/config.yaml
+# Central configuration file — all hyperparameters & paths here
+# Never hardcode values in notebooks or scripts
+# =============================================================
+
+project:
+  name: 'breast_cancer_binary_classification'
+  version: '1.0.0'
+  description: 'Industry-grade binary classification reference pipeline'
+  author: 'nahid'
+
+data:
+  raw_path: 'data/raw/'
+  processed_path: 'data/processed/'
+  external_path: 'data/externel/'
+  target_column: 'target'
+  positive_label: 1
+  negative_label: 0
+  test_size: 0.20
+  val_size: 0.15
+  random_state: 42
+  stratify: true
+
+preprocessing:
+  handle_missing: true
+  missing_strategy: 'median'
+  handle_outlier: true
+  outlier_method: 'iqr'
+  outlier_threshold: 1.5
+  handle_skewness: true
+  skewness_threshold: 0.75
+  skewness_transform: 'yeo-johnson'
+  handle_collinearity: true
+  collinearity_threshold: 0.95
+  feature_selection: true
+  feature_selection_method: 'rfe'
+
+training:
+  cv_folds: 10
+  cv_strategy: 'stratified'
+  scoring_metric: 'roc_auc'
+  secondary_metrics:
+    - 'f1'
+    - 'precision'
+    - 'recall'
+    - 'accuracy'
+    - 'average_precision'
+  random_state: 42
+  n_jobs: -1
+
+models:
+  baseline:
+    - 'DummyClassifier'
+    - 'LogisticRegression'
+
+  candidates:
+    - 'LogisticRegression'
+    - 'RidgeClassifier'
+    - 'KNeighborsClassifier'
+    - 'SVC'
+    - 'DecisionTreeClassifier'
+    - 'RandomForestClassifier'
+    - 'GradientBoostingClassifier'
+    - 'ExtraTreesClassifier'
+    - 'AdaBoostClassifier'
+    - 'XGBClassifier'
+  final_model: 'RandomForestClassifier'
+
+
+hyperparameter_tuning:
+  method: 'optuna'
+  n_trials: 100
+  timeout: 600
+  direction: 'maximize'
+  metric: 'roc_auc'
+
+threshold_optimization:
+  optimize: true
+  method: 'f1'
+  cost_fn: 10
+  cost_fp: 1
+
+mlflow:
+  tracking_url: 'logs/mlruns'
+  experiment_name: 'breast_cancer_classification'
+  log_models: true
+  log_artifacts: true
+
+output:
+  models_path: 'models/'
+  reports_path: 'reports/'
+  figures_path: 'reports/figures/'
+  metrics_path: 'reports/metrics'
+  model_filename: 'final_model.joblib'
+  preprocessor_filename: 'preprocessor.joblib'
+
+logging:
+  level: 'INFO'
+  log_file: 'logs/pipeline.log'
+  format: '%(acstime)s | %(levelname)s | %(name)s | %(message)s'
