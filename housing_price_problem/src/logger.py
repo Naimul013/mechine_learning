@@ -19,7 +19,7 @@ def get_logger(name: str, log_path: str = 'logs/pipeline.log', level: str = 'INF
     )
 
     # console handler
-    console_handler = logging.streamHandler(sys.stdout)
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)
     console_handler.setFormatter(formatter)
 
