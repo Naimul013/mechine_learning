@@ -7,7 +7,7 @@ from pathlib import Path
 def get_logger(name: str, log_path: str = 'logs/pipeline.log', level: str = 'INFO')->logging.Logger:
 
     logger = logging.getLogger(name)
-    path = Path(log_path).parent.mkdir(parents = True, exist_ok = True)
+    Path(log_path).parent.mkdir(parents = True, exist_ok = True)
     logger.setLevel(getattr(logging, level.upper(), logging.INFO)) # it will set the logging level to the specified level or default to INFO if the level is not recognized.
 
     if logger.handlers:
