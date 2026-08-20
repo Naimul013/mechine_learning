@@ -1,0 +1,11 @@
+# settings of the project it stores the arguments and hyperparameters of the project
+
+data:
+  dataset: 'house-prices-advanced-regression-techniques'
+  data_path: 'data/raw'
+  target_column: 'SalePrice'
+
+split:
+  validation_size: 0.2
+  random_state: 42
+  strategy: 'random'
