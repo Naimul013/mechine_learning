@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path.cwd().resolve()))
 from src.logger import get_logger
 from src.config_loader import load_config
 
@@ -9,7 +12,7 @@ import pandas as pd
 logger = get_logger(__name__)
 config = load_config()
 
-def split_data(data: pd.DataFrame, validation_size: float = config['split']['validation_size'], random_state: int = config['split']['random_state']) -> tuple:
+def split_data(data: pd.DataFrame, validation_size: float = config['split']['validation_size'], random_state: int = config['split']['random_state']) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Splits the data into training and validation sets.
 
