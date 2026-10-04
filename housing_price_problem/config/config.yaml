@@ -9,3 +9,137 @@ split:
   validation_size: 0.2
   random_state: 42
   strategy: 'random'
+
+preprocessor:
+  existence_feature:
+    GarageExist: 'GarageYrBlt'
+    BsmtExist: 'BsmtCond'
+
+  absence_feature: 'None'
+
+  garage:
+    
+    numerical_features: 
+      - 'GarageYrBlt'
+      - 'GarageArea'
+      - 'GarageCars'
+    categorical_features:
+      - 'GarageFinish'
+      - 'GarageQual'
+      - 'GarageCond'
+      - 'GarageType'
+    
+
+  bsmt:
+    numerical_features:
+
+    categorical_features:
+      - 'BsmtCond'
+      - 'BsmtQual'
+      - 'BsmtExposure'
+      - 'BsmtFinType1'
+      - 'BsmtFinType2'
+   
+
+  lotfrontage:
+    strategy: 'neighborhood_median'
+    fallback: 'overall_median'
+
+  electrical:
+    feature: 'Electrical'
+    strategy: 'most_frequent'
+
+  other_cat_feature:
+    features: 
+      - 'Alley'
+      - "MSSubClass"
+      - "Condition1"
+      - "Condition2"
+      - "SaleType"
+      - "SaleCondition"
+      - "MiscFeature"
+      - 'MasVnrType'
+    strategy: 'constant'
+    fill_value: 'None'
+
+  masvnr_feature:
+    features:
+      - 'MasVnrType'
+      - 'MasVnrArea'
+
+  skewness:
+    features:
+    - 'LotFrontage'
+    - 'MiscVal'
+    - 'LotArea'
+    method: 'log1p'
+
+  ordinal:
+    quality:
+      features:
+        - 'ExterQual'
+        - 'ExterCond'
+        - 'BsmtQual'
+        - 'BsmtCond'
+        - 'HeatingQC'
+        - 'KitchenQual'
+        - 'FireplaceQu'
+        - 'GarageQual'
+        - 'GarageCond'
+        - 'PoolQC'
+      order:
+        - "None"
+        - "Po"
+        - "Fa"
+        - "TA"
+        - "Gd"
+        - "Ex"
+
+    exposure:
+      features:
+        - 'BsmtExposure'
+
+      order:
+        - "None"
+        - "No"
+        - "Mn"
+        - "Av"
+        - "Gd"
+
+    basement:
+      features:
+        - 'BsmtFinType1'
+        - 'BsmtFinType2'
+      order:
+        - "None"
+        - "Unf"
+        - "Lwq"
+        - "Rec"
+        - "BLQ"
+        - "ALQ"
+        - "GLQ"
+
+    garage:
+      features:
+        - 'GarageFinish'
+      order:
+        - "None"
+        - "Unf"
+        - "RFn"
+        - "Fin"
+
+    fence:
+      features:
+        - 'Fence'
+      order:
+        - "None"
+        - "MnWw"
+        - "GdWo"
+        - "MnPrv"
+        - "GdPrv"
+
+  
+
+    
+
+
