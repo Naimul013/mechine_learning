@@ -7,7 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from src.config_loader import load_config
 from src.logger import get_logger
-from src.playground import ordinal_pipeline
+# from src.playground import ordinal_pipeline
 
 logger = get_logger()
 config = load_config()
@@ -160,7 +160,32 @@ class MasVnrFeatureEngineer(BaseEstimator, TransformerMixin):
 
         return X
 
+#-----------------------------------------------
+# ordinal pipeline
+#-----------------------------------------------
 
+def ordinal_pipeline(features: list[str], order: list[str]):
+    pipeline = Pipeline(
+        steps=[
+            (
+                'imputer',
+                SimpleImputer(
+                    strategy='constant',
+                    fill_value='None'
+                )
+            ),
+            (
+                'encoder',
+                OrdinalEncoder(
+                    categories=[order] * len(features),
+                    handle_unknown='use_encoded_value',
+                    unknown_value=-1
+                )
+            )
+        ]
+    )
+
+    return pipeline
 
 
 '''Missing values'''
