@@ -138,6 +138,79 @@ preprocessor:
         - "MnPrv"
         - "GdPrv"
 
+
+models:
+  linear_models:
+    liner_regression:
+      fit_intercept: True
+      normalize: False
+      copy_X: True
+      n_jobs: None
+    Ridge:
+      max_iter: 1000
+      alpha: 1.0
+      solver: 'auto'
+      random_state: 42
+    Lasso:
+      alpha: 0.1
+      random_state: 42
+    ElasticNet:
+      alpha: 0.1
+      l1_ratio: 0.5
+      random_state: 42
+
+  distance_based_models:
+    KNeighborsRegressor:
+      n_neighbors: 5
+      n_jobs: None
+  
+  tree_based_models:
+    DecisionTreeRegressor:
+      max_depth: None
+      min_samples_split: 2
+      min_samples_leaf: 1
+      random_state: 42
+    RandomForestRegressor:
+      n_estimators: 100
+      max_depth: None
+      min_samples_split: 2
+      min_samples_leaf: 1
+      n_jobs: None
+      random_state: 42
+    GradientBoostingRegressor:
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: 3
+      random_state: 42
+    ExtraTreesRegressor:
+      n_estimators: 100
+      max_depth: None
+      min_samples_split: 2
+      min_samples_leaf: 1
+      n_jobs: None
+      random_state: 42
+    HistGradientBoostingRegressor:
+      max_iter: 100
+      learning_rate: 0.1
+      max_depth: None
+      random_state: 42
+
+  other_models:
+    XGBRegressor:
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: 3
+      random_state: 42
+    LGBMRegressor:
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: -1
+      random_state: 42
+    CatBoostRegressor:
+      iterations: 100
+      learning_rate: 0.1
+      depth: 6
+      random_state: 42
   
 
     
