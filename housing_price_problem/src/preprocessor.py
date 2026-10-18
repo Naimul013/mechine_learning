@@ -9,7 +9,7 @@ from src.config_loader import load_config
 from src.logger import get_logger
 # from src.playground import ordinal_pipeline
 
-logger = get_logger()
+logger = get_logger(__name__)
 config = load_config()
 
 '''Feature Engineering'''
@@ -87,7 +87,7 @@ class StructuralFeatureEngineer(BaseEstimator, TransformerMixin):
         self.absence_feature = absence_feature
 
     def fit(self, X: pd.DataFrame, y = None):
-        combine_features = self.numerical_features + self.categorical_features + list[self.existence_feature.values()]
+        combine_features = self.numerical_features + self.categorical_features + list(self.existence_feature.values())
 
         missing_features = [col for col in combine_features if col not in X.columns]
 
@@ -132,14 +132,14 @@ class MasVnrFeatureEngineer(BaseEstimator, TransformerMixin):
             (X['MasVnrArea'] == 1) &
             (X['MasVnrType']).isna()
         )
-        X.loc(mask, 'MasVnrArea') = 0
-        X.loc(mask, 'MasVnrType') = 'None'
+        X.loc[mask, 'MasVnrArea'] = 0
+        X.loc[mask, 'MasVnrType'] = 'None'
         # Case 2
         mask = (
             (X['MasVnrArea'] > 10) &
             (X['MasVnrType'].isna())
         )
-        X.loc(mask, 'MasVnrType') = self.type_most_frequent_
+        X.loc[mask, 'MasVnrType'] = self.type_most_frequent_
 
         # Case 3
 
@@ -403,6 +403,7 @@ def build_preprocessor(config : dict) -> Pipeline:
     ordinal_basement_features = ordinal_config['basement']['features']
     ordinal_garage_features = ordinal_config['garage']['features']
     ordinal_fence_features = ordinal_config['fence']['features']
+    ordinal_paveddrive_features = ordinal_config['PavedDrive']['feature']
 
     ordinal_quality_features_pipeline = ordinal_pipeline(
         features=ordinal_quality_features, order= ordinal_config['quality']['order']
@@ -419,13 +420,16 @@ def build_preprocessor(config : dict) -> Pipeline:
     ordinal_fence_features_pipeline = ordinal_pipeline(
         features= ordinal_fence_features, order= ordinal_config['fence']['order']
     )
+    ordinal_paveddrive_features_pipeline = ordinal_pipeline(
+        features= ordinal_paveddrive_features, order= ordinal_config['PavedDrive']['order']
+    )
 
 
     #------------------------------
     # 5. Nominal/categorical transformer
     #------------------------------
 
-    nominal_config = config_preprocessor['other_cat_features']
+    nominal_config = config_preprocessor['other_cat_feature']
     nominal_config_features = nominal_config['features']
     nominal_pipeline = Pipeline(
         steps=[
@@ -451,8 +455,22 @@ def build_preprocessor(config : dict) -> Pipeline:
     #------------------------
 
     electrical_config = config_preprocessor['electrical']
-    electric_impute = SimpleImputer(
-        strategy=electrical_config['strategy'],
+    electric_pipeline = Pipeline(
+        steps=[
+            (
+                'imputer',
+                SimpleImputer(
+                    strategy= electrical_config['strategy'],
+                )
+            ),
+            (
+                'encoder',
+                OneHotEncoder(
+                    handle_unknown='ignore',
+                    sparse_output=False,
+                )
+            )
+        ]
     )
 
     #-----------------------------
@@ -492,13 +510,18 @@ def build_preprocessor(config : dict) -> Pipeline:
                 ordinal_fence_features,
             ),
             (
+                'ordinal_paveddrive',
+                ordinal_paveddrive_features_pipeline,
+                ordinal_paveddrive_features,
+            ),
+            (
                 'nominal',
                 nominal_pipeline,
                 nominal_config_features
             ),
             (
                 'electrical',
-                electric_impute,
+                electric_pipeline,
                 electrical_config['feature']
             )
         ],

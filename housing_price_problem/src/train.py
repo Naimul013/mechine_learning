@@ -1,4 +1,4 @@
-from matplotlib.pylab import Any
+from typing import Any
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline

@@ -4,7 +4,7 @@ data:
   dataset: 'house-prices-advanced-regression-techniques'
   data_path: 'data/raw'
   target_column: 'SalePrice'
-
+random_state: 42
 split:
   validation_size: 0.2
   random_state: 42
@@ -18,7 +18,6 @@ preprocessor:
   absence_feature: 'None'
 
   garage:
-    
     numerical_features: 
       - 'GarageYrBlt'
       - 'GarageArea'
@@ -31,7 +30,7 @@ preprocessor:
     
 
   bsmt:
-    numerical_features:
+    numerical_features: []
 
     categorical_features:
       - 'BsmtCond'
@@ -46,7 +45,8 @@ preprocessor:
     fallback: 'overall_median'
 
   electrical:
-    feature: 'Electrical'
+    feature:
+    - 'Electrical'
     strategy: 'most_frequent'
 
   other_cat_feature:
@@ -59,6 +59,26 @@ preprocessor:
       - "SaleCondition"
       - "MiscFeature"
       - 'MasVnrType'
+      - 'MSZoning'
+      - 'Street'
+      - 'LotShape'
+      - 'LandContour'
+      - 'Utilities'
+      - 'LotConfig'
+      - 'LandSlope'
+      - 'Neighborhood'
+      - 'BldgType'
+      - 'HouseStyle'
+      - 'RoofStyle'
+      - 'RoofMatl'
+      - 'Exterior1st'
+      - 'Exterior2nd'
+      - 'Foundation'
+      - 'Heating'
+      - 'CentralAir'
+      - 'Functional'
+      - 'GarageType'
+    
     strategy: 'constant'
     fill_value: 'None'
 
@@ -138,14 +158,22 @@ preprocessor:
         - "MnPrv"
         - "GdPrv"
 
+    PavedDrive:
+      feature:
+        - 'PavedDrive'
+      order:
+        - 'N'
+        - 'P'
+        - 'Y'
+
 
 models:
   linear_models:
-    liner_regression:
+    linear_regression:
       fit_intercept: True
       normalize: False
       copy_X: True
-      n_jobs: None
+      n_jobs: null
     Ridge:
       max_iter: 1000
       alpha: 1.0
@@ -162,20 +190,20 @@ models:
   distance_based_models:
     KNeighborsRegressor:
       n_neighbors: 5
-      n_jobs: None
+      n_jobs: null
   
   tree_based_models:
     DecisionTreeRegressor:
-      max_depth: None
+      max_depth: null
       min_samples_split: 2
       min_samples_leaf: 1
       random_state: 42
     RandomForestRegressor:
       n_estimators: 100
-      max_depth: None
+      max_depth: null
       min_samples_split: 2
       min_samples_leaf: 1
-      n_jobs: None
+      n_jobs: null
       random_state: 42
     GradientBoostingRegressor:
       n_estimators: 100
@@ -184,15 +212,15 @@ models:
       random_state: 42
     ExtraTreesRegressor:
       n_estimators: 100
-      max_depth: None
+      max_depth: null
       min_samples_split: 2
       min_samples_leaf: 1
-      n_jobs: None
+      n_jobs: null
       random_state: 42
     HistGradientBoostingRegressor:
       max_iter: 100
       learning_rate: 0.1
-      max_depth: None
+      max_depth: 3
       random_state: 42
 
   other_models:
@@ -211,6 +239,10 @@ models:
       learning_rate: 0.1
       depth: 6
       random_state: 42
+evaluation:
+  results_dir: result
+  results_filename: benchmark_results.csv
+
   
 
     

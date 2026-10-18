@@ -33,7 +33,7 @@ def train_model_collections(
     for model_name, model in models.items():
         try:
             logger.info(
-                'Started training collection: %s, model: %s', collection_name, len(model_name)
+                'Started training collection: %s, model: %s', collection_name, model_name
             )
 
             fitted_model = train_model(
@@ -192,15 +192,15 @@ def main()-> None:
     #----------------------------------
     #Evaluate candidate model
     #----------------------------------
-    candidate_resutls = evaluate_model_collections(
+    candidate_results = evaluate_model_collections(
         X_val=X_val,
         y_val=y_val,
         trained_models=trained_candidate_model,
         collection_name='candidate'
     )
 
-    if not candidate_resutls.empty:
-        logger.info('Candidate results \n %s', candidate_resutls.to_string(index=False))
+    if not candidate_results.empty:
+        logger.info('Candidate results \n %s', candidate_results.to_string(index=False))
 
 
     #----------------------
@@ -208,7 +208,7 @@ def main()-> None:
     #----------------------
 
     results_frame = [
-        frame for frame in (baseline_results, candidate_resutls) if not frame.empty
+        frame for frame in (baseline_results, candidate_results) if not frame.empty
     ]
 
     if not results_frame:
@@ -240,7 +240,7 @@ def main()-> None:
 
     best_evaluation = successful_evaluation.iloc[0]
 
-    logger.info('Best models evaluation : %s | group: %s | rmsle: %.6f', best_evaluation['model_name'], best_evaluation['model_group'], best_evaluation['rmsle'])
+    logger.info('Best models evaluation : %s | group: %s | rmsle: %.6f', best_evaluation['model_name'], best_evaluation['collection_name'], best_evaluation['rmsle'])
 
 
 if __name__ == '__main__':

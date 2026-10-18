@@ -1,5 +1,5 @@
 # dummy models
-from matplotlib.pylab import Any
+from typing import Any
 from sklearn.dummy import DummyRegressor
 # linear models
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
@@ -39,7 +39,7 @@ def get_baseline_models(config : dict) -> dict[str, Any]:
     return {
         'DummyRegressor (mean)': DummyRegressor(strategy='mean'),
         'DummyRegressor (median)': DummyRegressor(strategy='median'),
-        'LinearRegression': LinearRegression(n_jobs=config['models']['linear_models']['LinearRegression']['n_jobs']),
+        'LinearRegression': LinearRegression(n_jobs=config['models']['linear_models']['linear_regression']['n_jobs']),
     }
 
 def get_candidate_models(config : dict) -> dict[str, Any]:

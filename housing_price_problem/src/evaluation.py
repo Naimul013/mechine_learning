@@ -32,7 +32,7 @@ def validate_evaluation_data(
 
     if y_true.size == 0:
         raise ValueError("y_val is empty.")
-    if not np.isinfinite(y_true).all() and not np.isnan(y_true).all():
+    if not np.isfinite(y_true).all() and not np.isnan(y_true).all():
         raise ValueError("y_val contains NaN or infinite values.")
     if y_true.any() < 0:
         raise ValueError("y_val contains negative values, which is unexpected for housing prices.")
