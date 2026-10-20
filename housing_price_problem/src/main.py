@@ -6,8 +6,9 @@ from src.logger import get_logger
 from src.split import split_data
 from src.models import get_baseline_models, get_candidate_models
 from src.train import train_model   
-from src.evaluation import evaluate_models, validate_evaluation_data
+from src.evaluation import evaluate_models
 from src.load_data import load_data_from_kaggle
+from src.cross_validation import cross_validate_models
 
 config = load_config()
 logger = get_logger(__name__)
@@ -227,6 +228,60 @@ def main()-> None:
     #Save benchmark results
     #---------------------------------
     save_benchmark_results(results= all_results_frame, config=config)
+
+    #--------------------------------
+    # Cross validation
+    #-------------------------------
+    top_model_names = [
+    "GradientBoostingRegressor",
+    "HistGradientBoostingRegressor",
+    "XGBRegressor",
+    ]
+    cv_models = {
+        name: candidate_models[name]
+        for name in top_model_names
+        if name in candidate_models
+    }
+    missing_models = set(top_model_names) - set(cv_models)
+
+    if missing_models:
+        logger.warning(
+            "These models were not found in candidate_models: %s",
+            sorted(missing_models),
+        )
+
+    if cv_models:
+        cv_results = cross_validate_models(
+            X_train=X_train,
+            y_train= y_train,
+            models= cv_models,
+            config=config
+        )
+
+        logger.info(
+            "Cross-validation results:\n%s",
+            cv_results.to_string(index=False),
+        )
+        # Save CV results separately from the benchmark.
+        results_dir = PROJECT_ROOT / "reports"
+        results_dir.mkdir(parents=True, exist_ok=True)
+
+        results_path = results_dir / "cross_validation_results.csv"
+
+        cv_results.to_csv(
+            results_path,
+            index=False,
+        )
+
+        logger.info(
+            "Cross-validation results saved to %s",
+            results_path,
+        )
+    else:
+        logger.error(
+            "No candidate models available for cross-validation."
+        )
+
 
     #-------------------------------------------
     #Report best evaluation
